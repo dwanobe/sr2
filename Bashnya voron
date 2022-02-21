@@ -1,0 +1,75 @@
+'''
+Напишите функцию, распределяющую строки по ярусам башни.
+Функция tiers_distribute() принимает произвольное число позиционных аргументов-строк и произвольное число именованных параметров, среди которых могут быть такие:
+sub – параметр для определения обитателей нижнего яруса;
+length – параметр, определяющий наибольшую длину обитателей среднего яруса;
+s_key – ключ сортировки.
+
+Функция возвращает словарь с ключами:
+ground_level – строки, в которых есть подстрока, указанная в параметре sub; если он не передан, то проверять наличие подстроки bug;
+middle_level – начинающиеся с прописной буквы и без указанной подстроки, с длиной, меньшей параметра length, если он передан, если нет, то длина не проверяется;
+crow_level – строки, не подошедшие на другие ярусы.
+Значения по ключам – списки подходящих строк, отсортированных по ключу в параметре s_key, если он передан. Если не передан, то порядок передачи в функцию сохраняется.
+
+Пример 1
+Ввод	Вывод
+things = ["wall", "cabinet", "folio",
+         "Grimoire", "feature", "pear",
+         "reason", "Throne"]
+params = {
+   "sub": "ea",
+   "s_key": len
+}
+result = tiers_distribute(*things, **params)
+result = {
+    'ground_level': ['pear', 'reason', 'feature'],
+    'middle_level': ['Throne', 'Grimoire'],
+    'crow_level': ['wall', 'folio', 'cabinet'],
+}
+Пример 2
+Ввод	Вывод
+things = ["About bugs", "About books",
+         "About wizards",
+         "About the structure of the World", "bugs and worms"]
+params = {
+   "length": 12
+}
+result = tiers_distribute(*things, **params)
+result = {
+    'ground_level': ['About bugs', 'bugs and worms'],
+    'middle_level': ['About books'],
+    'crow_level': ['About wizards', 'About the structure of the World'],
+}
+Пример 3
+Ввод	Вывод
+def f(line):
+   return line.count(" ")
+
+
+things = ["About the world",
+         "About the search for the Holy Grail",
+         "About everything",
+         "magicians, miracle workers and dragons"]
+params = {
+   "s_key": f
+}
+result = tiers_distribute(*things, **params)
+result = {
+    'ground_level': [],
+    'middle_level': ['About everything', 'About the world', 'About the search for the Holy Grail'],
+    'crow_level': ['magicians, miracle workers and dragons'],
+}
+'''
+
+
+
+
+def tiers_distribute(*args, sub='bug', length=1000000, s_key=lambda x: 1, **kwards):
+    ground_level = sorted(list(filter(lambda x: sub in x, args)), key=s_key)
+    middle_level = sorted(list(filter(lambda x: len(x) < length, 
+                                      filter(lambda x: x[0] == x[0].upper(), 
+                                             filter(lambda x: sub not in x, args)))), key=s_key)
+    crow_level = sorted(list(filter(lambda x: x not in middle_level, 
+                                    filter(lambda x: x not in ground_level, args))), key=s_key)
+    a = {'ground_level': ground_level, 'middle_level': middle_level, 'crow_level': crow_level}
+    return a
