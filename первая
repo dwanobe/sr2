@@ -1,0 +1,20 @@
+from datetime import date, timedelta
+
+t = [int(x) for x in input().split()]
+a, b = timedelta(days=t[0]), timedelta(days=t[1])
+c = [int(x) for x in input().split('/')]
+datea = date(c[2], c[1], c[0])
+dateb = datea
+k = int(input())
+c = 0
+for i in range(1, 100000):
+    if i % t[1] == 0 and i % t[0] == 0:
+        v = timedelta(days=i)
+        break
+p = 0
+while p < k:
+    datea += v
+    if datea.weekday() != 1:
+        print(datea.strftime('%d %B %y'))
+        p += 1
+        
