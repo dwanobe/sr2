@@ -1,0 +1,64 @@
+Когда я обнаружил, что разогревшийся от перегрузки атомный реактор погубил лучший кусок говяжьего филе, я на мгновенье потерял душевное равновесие. Выброшенная за борт говядина, вместо того чтобы улететь в пространство, не хотела расставаться с ракетой и кружила около нее, регулярно каждые одиннадцать минут и четыре секунды вызывая кратковременные солнечные затмения.
+То, что за борт было выброшено именно говяжье филе, достаточно случайное событие. Напишите программу, моделирующую выброс в пространство различных других продуктов питания.
+Продукт питания – случайное значение из введенного списка слов, разделенных запятой и пробелом, повторения возможны.
+Масса – вещественное число из введенного диапазона с точностью до одного знака после запятой, без повторений.
+Сила выброса – случайное целое число из введенного диапазона с шагом 5, повторения возможны.
+Идентификатор – уникальный номер из одной буквы латинского алфавита в верхнем регистре и двух цифр, одна из которых вводится.
+
+Формат ввода
+Вводятся строки:
+строка словосочетаний через запятую и пробел – список возможных продуктов;
+два вещественных числа через пробел – диапазон масс;
+два целых числа через пробел – диапазон сил;
+цифра – должна присутствовать в идентификаторе.
+Последним вводится количество строк, которые нужно вывести.
+
+Формат вывода
+Вывести заданное число строк в формате:
+<Идентификатор>. Eclipses form a product of <продукт> with mass <масса>, ejected with force <сила>.
+
+Пример
+Ввод	Вывод
+beef, fried potatoes, tomatoes, onions
+102.8 250.0
+42 187
+0
+5
+T90. Eclipses form a product of fried potatoes with mass 176.1, ejected with force 112.
+Z50. Eclipses form a product of fried potatoes with mass 230.0, ejected with force 127.
+X80. Eclipses form a product of tomatoes with mass 117.2, ejected with force 147.
+M00. Eclipses form a product of beef with mass 152.8, ejected with force 137.
+F60. Eclipses form a product of onions with mass 104.2, ejected with force 147.
+Примечания
+Подставляемые значения в примере случайны, в задаче не проверяется точное совпадение.
+Для вывода вещественного числа с указанным числом знаков можно воспользоваться конструкцией:
+
+a = 3.1  
+print(f"{a:.2f}")
+
+
+import random
+
+a = input().split(', ')
+m1, m2 = [float(x) for x in input().split()]
+s1, s2 = [int(x) for x in input().split()]
+d = int(input())
+c = int(input())
+alf = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+indefsp, msp = [], []
+for i in range(c):
+    while True:
+        o = [str(random.randrange(10)), str(d)]
+        random.shuffle(o)
+        indef = str(random.choice(alf)) + o[0] + o[1]
+        if indef not in indefsp:
+            indefsp.append(indef)
+            break
+    prod = random.choice(a)
+    while True:
+        m = random.randint(int(m1), int(m2) - 1) + random.random()
+        if m not in msp:
+            msp.append(m)
+            break
+    sila = random.randrange(s1, s2, 5)
+    print(f'{indef}. Eclipses form a product of {prod} with mass {m:.1f}, ejected with force {sila}.')
