@@ -1,0 +1,68 @@
+import numpy as np
+def f(s):
+    ma, io, jo = 0.0, 0, 0
+    for i in range(len(s)):
+        for j in range(len(s[0])-1):
+            if abs(s[i][j]) > ma:
+                ma = abs(s[i][j])
+                io, jo = (i, j)
+    for i in range(len(s)):
+        if i != io:
+            k = s[i][jo] / s[io][jo]
+            for j in range(len(s[0])):
+                if j != jo:
+                    s[i][j] = s[i][j] / k - s[io][j]
+            s[i][jo] = 0
+    return io, s
+
+
+a, b = [], []
+n = int(input())
+for i in range(n):
+    a1 = []
+    for j in range(n+1):
+        a1.append(float(input()))
+    a.append(a1)
+b, y=[x[:] for x in a], [x[:] for x in a]
+p=[]
+while len(b)>1:
+    ip, a = f(b)
+    b = [x[:] for x in a]
+    for i in p:
+        a.append(i)
+    p.append(a[ip])
+    b.pop(ip)
+
+o, x = [[0] for t in range(n)], [0 for t in range(n)]
+for i in range(n):
+    k=0
+    for j in range(n+1):
+        if a[i][j]==0:
+            a[i][j]=0
+            k+=1
+    o[n-k-1]=a[i]
+
+o=sorted(o, key=lambda x:x.count(0))
+o.reverse()
+for i in range(n):
+    u, p=0, 0
+    for j in range(n):
+        f1, f2=o[i][j], x[j]
+        u+=(f1*f2)
+        if (not x[j] and o[i][j]):
+                l = j
+    x[l]=(o[i][n]-u)/o[i][l]
+
+for i in range(n):
+        print(o[i])
+print()
+print(x)
+
+r=[]
+for i in range(n):
+    u=0
+    for j in range(n):
+        u += y[i][j]*x[j]
+    r.append(u-y[i][n])
+print()
+print(r)
